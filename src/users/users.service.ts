@@ -38,21 +38,20 @@ export class UsersService {
     
     }
     delete(id:number):Boolean{
-        const index: number[]=[]
-        for(let i=0;i<users.length;i++){
-            index.push(users[i].id)
-        }
-        if(id in index){
-            let position
-            for(let i=0; i<users.length;i++){
-                if(users[i].id===id){
-                    position=i
-                }
+        let position
+        for(let i=0; i<users.length;i++){
+            if(users[i].id===id){
+                position=i
             }
-            users.splice(position,1)
+        }
+        if(users.splice(position,1)[0]==users[position]){
             return true
         }
-        
+        else{
+            return false
+        }
+           
     }
-    
+        
 }
+    
