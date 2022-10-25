@@ -1,4 +1,5 @@
 import { Controller,Get, Body, Post, Param, Put,Delete,HttpException,HttpStatus } from '@nestjs/common';
+import { User } from 'src/users/user.entity';
 import { Association } from './association.entity';
 import { AssociationsService } from './associations.service';
 @Controller('associations')
@@ -21,6 +22,16 @@ export class AssociationsController {
         }
     
     
+    }
+    @Get(':id/members')
+    getMembers(@Param() parameter): User[] {
+        if(this.service.getById(parameter.id)){
+            return this.service.getMembers(parameter.id)
+        }
+        else{
+            throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
+        }
+        
     }
     @Post()
     create(@Body() input: any): Association {
