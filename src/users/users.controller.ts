@@ -1,4 +1,4 @@
-import { Controller,Get, Body, Post } from '@nestjs/common';
+import { Controller,Get, Body, Post, Param } from '@nestjs/common';
 import { User } from './user.entity';
 
 const users : User[] = [
@@ -10,9 +10,15 @@ const users : User[] = [
 ]
 @Controller('users')
 export class UsersController {
-@Get('all')
-getAll(): string[] {
-    return ['a', 'b', 'c'];
+@Get()
+getAll(): User[] {
+    return users;
+}
+@Get(':id')
+getById(@Param() parameter): User {
+    const result = users.filter(user => user.id===+parameter.id)
+    return result[0]
+
 }
 @Post()
 create(@Body() input: any): User {
