@@ -31,7 +31,11 @@ export class AssociationsService {
 
     }
     create(idUsers: number[], name: String): Association {
-        const newAssos= new Association(associations.length, idUsers,name)
+        const result :number[]=[]
+        for(let i in idUsers){
+            result.push(+i)
+        }
+        const newAssos= new Association(associations.length, result,name)
         associations.push(newAssos)
         return newAssos
     }
