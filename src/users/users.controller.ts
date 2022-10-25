@@ -1,4 +1,4 @@
-import { Controller,Get, Body, Post, Param, Put,Delete } from '@nestjs/common';
+import { Controller,Get, Body, Post, Param, Put,Delete,HttpException,HttpStatus } from '@nestjs/common';
 import { User } from './user.entity';
 
 const users : User[] = [
@@ -16,8 +16,18 @@ getAll(): User[] {
 }
 @Get(':id')
 getById(@Param() parameter): User {
-    const result = users.filter(user => user.id===+parameter.id)
-    return result[0]
+    const index: number[]=[]
+    for(let i=0;i<users.length;i++){
+        index.push(users[i].id)
+    }
+    if(parameter.id in index){
+        const result = users.filter(user => user.id===+parameter.id)
+        return result[0]
+    }
+    else{
+        throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
+    }
+
 
 }
 @Post()
@@ -28,26 +38,45 @@ create(@Body() input: any): User {
 }
 @Put(':id')
 update(@Param() parameter,@Body() input: any):User {
-    const result = users.filter(user => user.id===+parameter.id)
-    if(input.firstname!== undefined){
-        result[0].firstname=input.firstname
+    const index: number[]=[]
+    for(let i=0;i<users.length;i++){
+        index.push(users[i].id)
     }
-    if(input.lastname!== undefined){
-        result[0].lastname=input.lastname
+    if(parameter.id in index){
+        const result = users.filter(user => user.id===+parameter.id)
+        if(input.firstname!== undefined){
+            result[0].firstname=input.firstname
+        }
+        if(input.lastname!== undefined){
+            result[0].lastname=input.lastname
+        }
+        return result[0]
     }
-    return result[0]
+    else{
+        throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
+    }
+
 
 }
 @Delete(':id')
 delete(@Param() parameter):Boolean{
-    let position
-    for(let i=0; i<users.length;i++){
-        if(users[i].id===+parameter.id){
-            position=i
-        }
+    const index: number[]=[]
+    for(let i=0;i<users.length;i++){
+        index.push(users[i].id)
     }
-    users.splice(position,1)
-    return true
+    if(parameter.id in index){
+        let position
+        for(let i=0; i<users.length;i++){
+            if(users[i].id===+parameter.id){
+                position=i
+            }
+        }
+        users.splice(position,1)
+        return true
+    }
+    else{
+        throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
+    }
 }
 
 }
