@@ -1,28 +1,20 @@
 import { Controller,Get, Body, Post, Param, Put,Delete,HttpException,HttpStatus } from '@nestjs/common';
 import { User } from './user.entity';
-
-const users : User[] = [
-    {
-        id: 0,
-        lastname: 'Doe',
-        firstname: 'John'
-    }
-]
+import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
+constructor(
+    private service: UsersService
+) {}
 @Get()
 getAll(): User[] {
-    return users;
+    return this.service.getAll();
 }
 @Get(':id')
 getById(@Param() parameter): User {
-    const index: number[]=[]
-    for(let i=0;i<users.length;i++){
-        index.push(users[i].id)
-    }
-    if(parameter.id in index){
-        const result = users.filter(user => user.id===+parameter.id)
-        return result[0]
+ 
+    if(this.service.getById(parameter.id)){
+        return this.service.getById(parameter.id)
     }
     else{
         throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
@@ -32,25 +24,12 @@ getById(@Param() parameter): User {
 }
 @Post()
 create(@Body() input: any): User {
-    const newUser= new User(users.length, input.firstname,input.lastname)
-    users.push(newUser)
-    return newUser
+    return this.service.create(input.firstname,input.lastname,input.age)
 }
 @Put(':id')
 update(@Param() parameter,@Body() input: any):User {
-    const index: number[]=[]
-    for(let i=0;i<users.length;i++){
-        index.push(users[i].id)
-    }
-    if(parameter.id in index){
-        const result = users.filter(user => user.id===+parameter.id)
-        if(input.firstname!== undefined){
-            result[0].firstname=input.firstname
-        }
-        if(input.lastname!== undefined){
-            result[0].lastname=input.lastname
-        }
-        return result[0]
+    if(this.service.getById(parameter.id)){
+        return this.service.update(parameter.id,input.firstname,input.lastname,input.age)
     }
     else{
         throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
@@ -60,19 +39,8 @@ update(@Param() parameter,@Body() input: any):User {
 }
 @Delete(':id')
 delete(@Param() parameter):Boolean{
-    const index: number[]=[]
-    for(let i=0;i<users.length;i++){
-        index.push(users[i].id)
-    }
-    if(parameter.id in index){
-        let position
-        for(let i=0; i<users.length;i++){
-            if(users[i].id===+parameter.id){
-                position=i
-            }
-        }
-        users.splice(position,1)
-        return true
+    if(this.service.getById(parameter.id)){
+        return this.service.delete(parameter.id)
     }
     else{
         throw new HttpException(`Identifiant utilisateur introuvable ${parameter.id}`, HttpStatus.NOT_FOUND)
