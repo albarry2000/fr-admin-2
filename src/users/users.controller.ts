@@ -1,4 +1,4 @@
-import { Controller,Get, Body, Post, Param, Put } from '@nestjs/common';
+import { Controller,Get, Body, Post, Param, Put,Delete } from '@nestjs/common';
 import { User } from './user.entity';
 
 const users : User[] = [
@@ -37,6 +37,17 @@ update(@Param() parameter,@Body() input: any):User {
     }
     return result[0]
 
+}
+@Delete(':id')
+delete(@Param() parameter):Boolean{
+    let position
+    for(let i=0; i<users.length;i++){
+        if(users[i].id===+parameter.id){
+            position=i
+        }
+    }
+    users.splice(position,1)
+    return true
 }
 
 }
