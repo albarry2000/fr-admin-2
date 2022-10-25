@@ -1,4 +1,4 @@
-import { Controller,Get, Body, Post, Param } from '@nestjs/common';
+import { Controller,Get, Body, Post, Param, Put } from '@nestjs/common';
 import { User } from './user.entity';
 
 const users : User[] = [
@@ -25,6 +25,18 @@ create(@Body() input: any): User {
     const newUser= new User(users.length, input.firstname,input.lastname)
     users.push(newUser)
     return newUser
+}
+@Put(':id')
+update(@Param() parameter,@Body() input: any):User {
+    const result = users.filter(user => user.id===+parameter.id)
+    if(input.firstname!== undefined){
+        result[0].firstname=input.firstname
+    }
+    if(input.lastname!== undefined){
+        result[0].lastname=input.lastname
+    }
+    return result[0]
+
 }
 
 }
