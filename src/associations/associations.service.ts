@@ -49,16 +49,13 @@ export class AssociationsService {
     delete(id:number):Boolean{
      let position
     for(let i=0; i<associations.length;i++){
-        if(associations[i].id===id){
+        if(associations[i].id===+id){
             position=i
             }
         }
-    if(associations.splice(position,1)[0]==associations[position]){
-        return true
-    }
-    else{
-        return false
-    }
+    associations.splice(position,1)
+    return true
+  
             
     }
         

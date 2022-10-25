@@ -40,16 +40,13 @@ export class UsersService {
     delete(id:number):Boolean{
         let position
         for(let i=0; i<users.length;i++){
-            if(users[i].id===id){
+            if(users[i].id===+id){
                 position=i
             }
         }
-        if(users.splice(position,1)[0]==users[position]){
-            return true
-        }
-        else{
-            return false
-        }
+        users.splice(position,1)
+        return true
+
            
     }
         
