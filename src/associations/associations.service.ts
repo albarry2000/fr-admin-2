@@ -11,18 +11,19 @@ export class AssociationsService {
         return await this.assRepository.findOne({where: {id: idfind}})
 
     }
-    getMembers(id:number): Promise<User>{
-       return this.service.getById(id)
+    async getMembers(id:number): Promise<User>{
+       return await this.service.getById(id)
     }
     async getAll(): Promise<Association[]>{
         return await this.assRepository.find();
     }
     async create(name: string, idUsers: number[]): Promise<Association>{
-        const ass = new Association()
-        ass.name=name
+        const ass =  this.assRepository.create({ 
+            name: name
+        })
         if(idUsers){
-            for(let i in idUsers){
-                (await ass.users).push(await this.service.getById(+i))
+            for(let i=0; i<idUsers.length;i++){
+                (await ass.users)[i]=(await this.service.getById(idUsers[i]))
             }
         }
         return await this.assRepository.save(ass)

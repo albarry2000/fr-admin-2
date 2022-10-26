@@ -2,6 +2,9 @@ import { Controller, Get, Body, Param, Post, Put, Delete, HttpException, HttpSta
 import { AssociationsService } from './associations.service';
 import { Association } from './association.entity';
 import { User } from 'src/users/user.entity';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('associations')
 @Controller('associations')
 export class AssociationsController {
     @Get(':id')

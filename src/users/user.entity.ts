@@ -10,11 +10,11 @@ export class User{
         @Column()
         age: number
         
-        constructor (id:number,lastname:String, firstname:String, age:number){
+        /*constructor (id:number,lastname:String, firstname:String, age:number){
             this.id=id
             this.lastname=lastname
             this.firstname=firstname
             this.age=age
             
-        }
+        }*/
 }

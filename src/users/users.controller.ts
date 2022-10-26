@@ -1,13 +1,14 @@
 import { Controller, Get, Body, Param, Post, Put, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service'
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { UserInput } from './userinput';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
     @Get(':id')
-    getById(@Param() parameter): Promise<User> {
+    async getById(@Param() parameter): Promise<User> {
         if (this.service.getById(parameter.id)) {
             return this.service.getById(parameter.id)
         }
@@ -17,17 +18,19 @@ export class UsersController {
 
     }
     @Get()
-    getAll(): Promise<User[]>{
+    async getAll(): Promise<User[]>{
         return this.service.getAll();
     }
 
-
     @Post()
-    create(@Body() input: any): Promise<User>{
+    @ApiCreatedResponse({
+        description: 'The user has been successfully created.'
+    })
+    async create(@Body() input:UserInput): Promise<User>{
         return this.service.create(input.lastname, input.firstname,input.age)
     }
     @Put(':id')
-    update(
+    async update(
         @Param() parameter,
         @Body() input: any):Promise<User> {
             if (this.service.update(input.firstname,input.lastname,input.age,parameter.id)) {
@@ -39,7 +42,7 @@ export class UsersController {
     }
 
     @Delete(':id')
-    delete(@Param() parameter):Promise<String>{
+    async delete(@Param() parameter):Promise<String>{
         if (this.service.delete(parameter.id)) {
             return this.service.delete(parameter.id)
         }
