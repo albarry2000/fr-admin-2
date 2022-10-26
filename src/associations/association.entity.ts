@@ -1,11 +1,22 @@
+import { User } from 'src/users/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany,JoinTable  } from 'typeorm';
+@Entity()
 export class Association{
+    @PrimaryGeneratedColumn('increment')
     id:number
-    idUsers: number[]
+    @Column()
     name: String
-
-    constructor(id:number, idUsers: number[], name: String){
+    @ManyToMany(type => User)
+    @JoinTable()
+    users: Promise<User[]>
+    
+    /*constructor (id:number,name:String, users:Promise<User[]>){
         this.id=id
-        this.idUsers=idUsers
         this.name=name
-    }
+        this.users=users
+        
+    }*/
+
+
+
 }

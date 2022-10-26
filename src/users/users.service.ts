@@ -1,54 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-const users : User[] = [
-    {
-        id: 0,
-        lastname: 'Doe',
-        firstname: 'John',
-        age: 23
-    }
-]
 @Injectable()
 export class UsersService {
-    getAll(): User[] {
-        return users;
+    constructor(
+        @InjectRepository(User)
+        private usersRepository: Repository<User>
+        ) {}
+    async getAll(): Promise<User[]>{
+        return await this.usersRepository.find();
     }
-    getById(id:number): User {
-        const result = users.filter(user => user.id===+id)
-        return result[0]
+    async getById(idfind:number): Promise<User> {
+        return await this.usersRepository.findOne({where: {id: idfind}})
+
     }
-    create(firstname: String, lastname: String,age:number): User {
-        const newUser= new User(users.length, firstname,lastname,age)
-        users.push(newUser)
-        return newUser
+    async create(lastname: string, firstname: string, age: number): Promise<User>{
+        const newUser = await this.usersRepository.create({ 
+            lastname: lastname, 
+            firstname: firstname, 
+            age: age
+        })
+        return await this.usersRepository.save(newUser)
     }
-    update(id:number,firstname: String, lastname: String,age:number):User {
-        const result = users.filter(user => user.id===+id)
-        if(firstname!== undefined){
-            result[0].firstname=firstname
+    async update(lastname: string, firstname: string, age: number,id:number):Promise<User>{
+        const P= await this.getById(id)
+        if(lastname){
+            P.lastname=lastname;
         }
-        if(lastname!== undefined){
-                result[0].lastname=lastname
+        if(firstname){
+            P.firstname=firstname
         }
-        if(age!== undefined){
-            result[0].age=age
+        if(age){
+            P.age=age
         }
-        return result[0]
+        return await this.usersRepository.save(P)
     
     }
-    delete(id:number):Boolean{
-        let position
-        for(let i=0; i<users.length;i++){
-            if(users[i].id===+id){
-                position=i
-            }
-        }
-        users.splice(position,1)
-        return true
+    async delete(idfind:number):Promise<String>{
+        await this.usersRepository.delete(idfind)
+        return "OK"
+    }
 
            
-    }
-        
 }
+    
     
