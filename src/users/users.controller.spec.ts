@@ -30,7 +30,31 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(()
     controller = module.get<UsersController>(UsersController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('getAll', () => {
+    it('should return an array of users', async () => {
+      const expected = Promise.all([{ 
+          id: 0, 
+          firstname: 'John',
+          lastname: 'Doe',
+          age: 23
+      }]);
+      jest.spyOn(service, 'getAll').mockImplementation(() => expected);
+      expect(await controller.getAll()).toBe(await expected);
+    });
+  })
+
+  describe('getById', () => {
+    it('should return a single user, with the provided id', async () => {
+      const expected = await Promise.all([{
+        id: 1, 
+        firstname: 'Johnny',
+        lastname: 'Doe',
+        age: 23
+      }]);
+      jest.spyOn(service, 'getById').mockImplementation(id => {
+        return Promise.resolve(expected[0]);
+      });
+      expect(await controller.getById({id: 1})).toBe(await expected[0]);
+    })
   });
 });
