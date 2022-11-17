@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AssociationsModule } from './associations/associations.module';
 import { User } from './users/user.entity';
 import { Association } from './associations/association.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 
@@ -16,7 +17,7 @@ import { Association } from './associations/association.entity';
      entities: [User,Association],
      synchronize: true,
    }),
-    UsersModule, AssociationsModule],
+    UsersModule, AssociationsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

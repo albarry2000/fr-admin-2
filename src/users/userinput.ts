@@ -23,4 +23,6 @@ export class UserInput {
         type: Number,
     })
     public age: number;
+
+    public password: string
 }

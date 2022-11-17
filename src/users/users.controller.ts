@@ -27,14 +27,14 @@ export class UsersController {
         description: 'The user has been successfully created.'
     })
     async create(@Body() input:UserInput): Promise<User>{
-        return this.service.create(input.lastname, input.firstname,input.age)
+        return this.service.create(input.lastname, input.firstname,input.age,input.password)
     }
     @Put(':id')
     async update(
         @Param() parameter,
-        @Body() input: any):Promise<User> {
-            if (this.service.update(input.firstname,input.lastname,input.age,parameter.id)) {
-                return this.service.update(input.firstname,input.lastname,input.age,parameter.id)
+        @Body() input: UserInput):Promise<User> {
+            if (this.service.update(input.firstname,input.lastname,input.age,parameter.id,input.password)) {
+                return this.service.update(input.firstname,input.lastname,input.age,parameter.id,input.password)
             }
             else{
                 throw new HttpException(`Could not find a user with the id ${parameter.id}`, HttpStatus.NOT_FOUND)
