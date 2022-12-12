@@ -23,4 +23,9 @@ export class UserInput {
         type: Number,
     })
     public age: number;
+    @ApiProperty({
+        description: 'The Password of the user',
+        type: String
+    })
+    public password: string
 }

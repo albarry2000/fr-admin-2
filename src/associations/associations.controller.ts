@@ -8,7 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('associations')
 export class AssociationsController {
     @Get(':id')
-    getById(@Param() parameter): Promise<Association> {
+    async getById(@Param() parameter): Promise<Association> {
         if (this.service.getById(parameter.id)) {
             return this.service.getById(parameter.id)
         }
@@ -18,20 +18,20 @@ export class AssociationsController {
 
     }
     @Get()
-    getAll(): Promise<Association[]>{
+    async getAll(): Promise<Association[]>{
         return this.service.getAll();
     }
     @Get(':id/members')
-    getMembers(@Param() parameter):Promise<User>{
+    async getMembers(@Param() parameter):Promise<User>{
         return this.service.getMembers(parameter.id)
     }
 
     @Post()
-    create(@Body() input: any): Promise<Association>{
+    async create(@Body() input: any): Promise<Association>{
         return this.service.create(input.name,input.idUsers)
     }
     @Put(':id')
-    update(@Param() parameter,@Body() input: any):Promise<Association> {
+    async update(@Param() parameter,@Body() input: any):Promise<Association> {
             if (this.service.update(parameter.id,input.name,input.idUsers)) {
                 return this.service.update(parameter.id,input.name,input.idUsers)   
             }
@@ -41,7 +41,7 @@ export class AssociationsController {
     }
 
     @Delete(':id')
-    delete(@Param() parameter):Promise<String>{
+    async delete(@Param() parameter):Promise<String>{
         if (this.service.delete(parameter.id)) {
             return this.service.delete(parameter.id)
         }
