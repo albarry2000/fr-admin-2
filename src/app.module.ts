@@ -7,6 +7,8 @@ import { AssociationsModule } from './associations/associations.module';
 import { User } from './users/user.entity';
 import { Association } from './associations/association.entity';
 import { AuthModule } from './auth/auth.module';
+import { RoleModule } from './role/role.module';
+import { Role } from './role/role.entity';
 
 @Module({
 
@@ -14,10 +16,10 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({
      type: 'sqlite',
      database: 'mydatabase.db',
-     entities: [User,Association],
+     entities: [User,Association, Role],
      synchronize: true,
    }),
-    UsersModule, AssociationsModule, AuthModule],
+    UsersModule, AssociationsModule, AuthModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })
