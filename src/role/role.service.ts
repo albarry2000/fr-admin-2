@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Entity, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Role } from './role.entity';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class RoleService {
         @InjectRepository(Role)
         private roleRepository: Repository<Role>
     ) {}
-    async create(name: string, idUser: number, idAssociation:number): Promise<Role>{
+    async create(idUser: number, idAssociation:number,name: string): Promise<Role>{
         const ass =  this.roleRepository.create({ 
             name: name,
             idUser:idUser,
@@ -18,10 +18,10 @@ export class RoleService {
         return await this.roleRepository.save(ass)
     }
     async getById(idUser:number, idAssociation:number): Promise<Role> {
-        return await this.roleRepository.findOne({
+        return await this.roleRepository.findOneOrFail({
             where: {
                 idUser: idUser,
-                idAssociation: idAssociation,
+                idAssociation: idAssociation
             }
         })
     }
